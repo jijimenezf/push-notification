@@ -1,12 +1,33 @@
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { Component } from 'react';
+import { StyleSheet, Text, View, Vibration, TextInput, TouchableOpacity } from 'react-native';
+import { Notifications } from 'expo';
+import registerForPushNotificationsAsync from './registerForPushNotificationsAsync';
 
-export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-    </View>
-  );
+class App extends Component {
+  state = {
+    notification: {},
+  };
+
+  componentDidMount() {
+    registerForPushNotificationsAsync();
+
+    this._notificationSubscription = Notifications.addListener(this._handleNotification);
+  }
+
+  _handleNotification = notification => {
+    Vibration.vibrate();
+    console.log(notification);
+    this.setState({ notification: notification });
+  };
+
+  render() {
+    return (
+      <View style={styles.container}>
+        <Text>Origin: {this.state.notification.origin}</Text>
+        <Text>Data: {JSON.stringify(this.state.notification.data)}</Text>
+      </View>
+    );
+  }
 }
 
 const styles = StyleSheet.create({
@@ -17,3 +38,5 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 });
+
+export default App;

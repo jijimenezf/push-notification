@@ -1,0 +1,26 @@
+Please, follow these instructions in order to sent notifications to an expo device:
+
+1.- In the root folder, run "npm run serve". This would start a new instance for a local server (using express)
+that handles the request for both: subscribe the ID of the Expo device and send a custom message for that Expo device.
+
+2.- Open another console then run "ngrok http 3000" in order to expose the local server to the internet. Check the url
+for your exposed server in the console (something like 'http://d33f17dc.ngrok.io'). Update the url in both files:
+PUSH_REGISTRATION_ENDPOINT in "server/pushRegistration.js" and
+MESSAGE_ENPOINT in "server/sendMessage.js"
+
+3.- Open another console then run "npm start". This is the react native app that you must check on a physical device
+in order to receive the notification (it wouldn't work on any simulator).
+Check the console to get the current Expo ID for your device (something like 'ExponentPushToken[YtyyTmE1bBKxyucQ3Qg3Lq]')
+
+4.- After step 3 you need also to update the token value in "server/pushRegistration.js". This way you can ensure that
+registration is added for that Expo device. Open a new console and execute following statements:
+cd server
+node pushRegistration
+
+That way you're subscribing your device to the push notifications service.
+
+5.- After step 4 you can use same console and execute node sendMessage. In "server/sendMessage.js".
+You can change the value for the message you want to send.
+
+6.- As an improvement, you can add scripts in package.json to run steps 4 and 5
+
